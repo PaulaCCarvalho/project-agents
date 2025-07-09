@@ -11,7 +11,11 @@ await seed(db, schema ).refine(faker => ({
             name: faker.companyName(),
             description: faker.loremIpsum(),
         }
+    },
+    questions: {
+        count: 20
     }
+    
 }));
 
 await sql.end();

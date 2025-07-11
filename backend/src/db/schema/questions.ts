@@ -5,6 +5,6 @@ export const questions = pgTable('question', {
     id: uuid().primaryKey().defaultRandom(),
     roomId: uuid().references(() => rooms.id).notNull(),
     question: text().notNull(),
-    awswer: text(),
+    answer: text(),
     createdAt: timestamp().defaultNow().notNull(),
 })

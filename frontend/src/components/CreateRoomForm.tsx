@@ -19,7 +19,7 @@ import {
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
-import { useCreateRoom } from '@/http/types/useCreateRoom'
+import { useCreateRoom } from '@/http/useCreateRoom'
 
 const createRoomSchema = z.object({
   name: z.string().min(1, { message: 'Inclua no mínimo 3 caracteres' }),

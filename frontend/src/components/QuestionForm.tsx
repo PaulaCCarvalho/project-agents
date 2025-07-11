@@ -18,8 +18,8 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
+import { useCreateQuestion } from '@/http/useCreateQuestion'
 
-// Esquema de validação no mesmo arquivo conforme solicitado
 const createQuestionSchema = z.object({
   question: z
     .string()
@@ -35,6 +35,8 @@ interface QuestionFormProps {
 }
 
 export const QuestionForm = ({ roomId }: QuestionFormProps) => {
+  const {mutateAsync: createQuestion} = useCreateQuestion(roomId)
+
   const form = useForm<CreateQuestionFormData>({
     resolver: zodResolver(createQuestionSchema),
     defaultValues: {
@@ -42,10 +44,12 @@ export const QuestionForm = ({ roomId }: QuestionFormProps) => {
     },
   })
 
-  function handleCreateQuestion(data: CreateQuestionFormData) {
-    // biome-ignore lint/suspicious/noConsole: dev
-    console.log(data, roomId)
+  const handleCreateQuestion = async (data: CreateQuestionFormData) => {
+    await createQuestion(data)
+    form.reset()
   }
+
+  const { isSubmitting} = form.formState;
 
   return (
     <Card>
@@ -70,6 +74,7 @@ export const QuestionForm = ({ roomId }: QuestionFormProps) => {
                   <FormControl>
                     <Textarea
                       className="min-h-[100px]"
+                      disabled={isSubmitting}
                       placeholder="O que você gostaria de saber?"
                       {...field}
                     />
@@ -79,7 +84,7 @@ export const QuestionForm = ({ roomId }: QuestionFormProps) => {
               )}
             />
 
-            <Button type="submit">Enviar pergunta</Button>
+            <Button disabled={isSubmitting} type="submit">Enviar pergunta</Button>
           </form>
         </Form>
       </CardContent>
